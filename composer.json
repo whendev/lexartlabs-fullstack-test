@@ -1,0 +1,37 @@
+{
+    "name": "whendel/lexartlabs-fullstack-test",
+    "description": "Teste para vaga de desenvolvedor fullstack na lexartlabs",
+    "authors": [
+        {
+            "name": "whedev",
+            "email": "whendel.morais.9@gmail.com"
+        }
+    ],
+    "require": {
+        "rmccue/requests": "^1.7",
+        "coffeecode/router": "^1.0",
+        "league/plates": "v4.0.0-alpha",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "symfony/dotenv": "^5.2",
+        "ext-mbstring": "*",
+        "mercadolibre/php-sdk": "*@dev",
+        "coffeecode/paginator": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Source\\": "source"
+        },
+        "files": [
+            "source/Support/env-export.php",
+            "config/App.php",
+            "source/Boot/Helpers.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mercadolibre/php-sdk.git"
+        }
+    ]
+}
