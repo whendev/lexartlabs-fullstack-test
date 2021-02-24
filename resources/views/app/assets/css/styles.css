@@ -1,0 +1,28 @@
+section {
+    min-height: 100vh;
+    align-items: center;
+    display: flex;
+}
+
+img {
+    max-width: 100%;
+}
+
+span.Page_active {
+    background-color: #ccc !important;
+}
+
+.Page_item {
+    position: relative;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #007bff;
+    border: 1px solid #dee2e6;
+}
+
+.Page_item:hover {
+    background-color: #ccc;
+    text-decoration: none;
+}
+

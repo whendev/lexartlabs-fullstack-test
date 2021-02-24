@@ -1,0 +1,23 @@
+version: '3'
+services:
+  web:
+    build: .
+    container_name: php74-lexart
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html/
+  db:
+    container_name: mysql8-lexart
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: xxxxxxxxx
+      MYSQL_DATABASE: lexart
+      MYSQL_USER: xxxxxxxxxx
+      MYSQL_PASSWORD: xxxxxxxxxxxxxx
+    ports:
+      - '6033:3306'

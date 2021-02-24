@@ -1,0 +1,11 @@
+RewriteEngine on
+Options All -Indexes
+
+#
+RewriteCond %{SCRIPT_FILENAME} \.(?i:gif|jpe?g|png|md|json|lock|env|example|yml|gitignore|sql) [NC]
+RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
+
+#
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
