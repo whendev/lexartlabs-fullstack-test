@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d31b3eb92e08e4bb497eb5d655e8c1b1",
+    "content-hash": "de4545173a6705db0b369d10f0c61c56",
     "packages": [
         {
             "name": "coffeecode/paginator",
@@ -989,7 +989,9 @@
     "platform": {
         "ext-pdo": "*",
         "ext-json": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-libxml": "*",
+        "ext-dom": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

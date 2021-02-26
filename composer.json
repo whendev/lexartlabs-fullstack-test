@@ -16,7 +16,9 @@
         "symfony/dotenv": "^5.2",
         "ext-mbstring": "*",
         "mercadolibre/php-sdk": "*@dev",
-        "coffeecode/paginator": "^1.0"
+        "coffeecode/paginator": "^1.0",
+        "ext-libxml": "*",
+        "ext-dom": "*"
     },
     "autoload": {
         "psr-4": {
