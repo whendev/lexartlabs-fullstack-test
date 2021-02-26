@@ -9,7 +9,8 @@
                         <div class="form-group col-6 col-md-3">
                             <label class="w-100">
                                 <select name="web" class="form-control bg-primary text-white">
-                                    <option value="ml" selected>Mercado Livre</option>
+                                    <option value="ml" <?= (empty($web) || $web == 'ml' ? "selected" : ""); ?>>Mercado Livre</option>
+                                    <option value="bp" <?= (!empty($web) && $web == 'bp' ? "selected" : ""); ?>>Buscapé</option>
                                 </select>
                             </label>
                         </div>
@@ -48,7 +49,7 @@
                 </div>
                 <?php elseif (isset($products) && count($products) == 0): ?>
                     <div class="alert alert-warning" role="alert">
-                        Não encontramos nada sobre <b><?= $search; ?></b>, na categoria <b><?= $category; ?></b>
+                        Não encontramos nada sobre <b><?= $search; ?></b> no <b><?= ($web == "ml" ? "Mercado livre" : "Buscapé"); ?></b>, na categoria <b><?= $category; ?></b>
                     </div>
                 <?php else: ?>
                     <h2>
