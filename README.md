@@ -1,8 +1,6 @@
 # 📝 lexartlabs-fullstack-test
 Teste para a vaga de desenvolvedor fullstack
 
-> OBS: como o buscapé não fornece uma api, so foi possível implementar com o mercado livre
-
 ## 🛠 Primeiros passos
 É possível clonar o repositório por meio do seu terminal apenas digitando:
 
