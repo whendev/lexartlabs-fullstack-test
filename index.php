@@ -15,8 +15,8 @@ $route->get("/", "App:home");
 $route->get("/login", "App:login");
 $route->post("/login", "App:login");
 $route->post("/search", "App:search");
-$route->get("/search/{category}/{search}/p/{page}", "App:search");
-$route->get("/search/{category}/p/{page}", "App:search");
+$route->get("/search/{web}/{category}/{search}/p/{page}", "App:search");
+$route->get("/search/{web}/{category}/p/{page}", "App:search");
 
 // ADMIN
 $route->group("/admin");
