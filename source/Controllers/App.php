@@ -116,57 +116,63 @@ class App extends Controller
                 redirect("/");
             }
         } elseif ($data['web'] == 'bp'){
+            $categories = ['celular', 'tv', 'geladeira'];
 
-            $search = filter_var($data['search'], FILTER_SANITIZE_STRIPPED);
-            $page = (filter_var($data['page'], FILTER_VALIDATE_INT) >= 1 ? $data['page'] : 1);
-            $category = (filter_var($data['category'], FILTER_SANITIZE_STRIPPED));
-            $pager = new Paginator(url("/search/bp/{$category}/p/"));
-            $search = urlencode($search);
-            if ($search){
-                $pager = new Paginator(url("/search/bp/{$category}/{$search}/p/"));
-            }
+            if (in_array($data['category'], $categories)){
+                $search = filter_var($data['search'], FILTER_SANITIZE_STRIPPED);
+                $page = (filter_var($data['page'], FILTER_VALIDATE_INT) >= 1 ? $data['page'] : 1);
+                $category = (filter_var($data['category'], FILTER_SANITIZE_STRIPPED));
+                $pager = new Paginator(url("/search/bp/{$category}/p/"));
+                $search = urlencode($search);
+                if ($search){
+                    $pager = new Paginator(url("/search/bp/{$category}/{$search}/p/"));
+                }
 
-            $url = "https://www.buscape.com.br/".(!empty($search) ? "search?q={$category}%20{$search}&page={$page}" : "{$category}?page={$page}");
+                $url = "https://www.buscape.com.br/".(!empty($search) ? "search?q={$category}%20{$search}&page={$page}" : "{$category}?page={$page}");
 
-            $httpClient = new Client();
-            $response = $httpClient->get($url);
-            $htmlString = (string) $response->getBody();
-            libxml_use_internal_errors(true);
+                $httpClient = new Client();
+                $response = $httpClient->get($url);
+                $htmlString = (string) $response->getBody();
+                libxml_use_internal_errors(true);
 
-            $doc = new \DOMDocument();
-            $doc->loadHTML($htmlString);
-            $xpath = new \DOMXPath($doc);
-            $links = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//div[@class="cardBody"]//a[@class="price"]//@href');
-            $titles = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//div[@class="cardBody"]//a[@class="name"]//@title');
-            $prices = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//div[@class="cardBody"]//span[@class="mainValue"]');
-            $images = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//img[@class="image"]/@src');
-            $arrayLength = $images->length;
-            $pagination = $xpath->evaluate('//div[@class="SearchPage_Pagination__3TZvP col"][1]//ul[@class="ais-Pagination-list ais-Pagination"]//li');
-            $pagination = (!empty($pagination) || $pagination > 3 ? $pagination->length - 3 : null);
+                $doc = new \DOMDocument();
+                $doc->loadHTML($htmlString);
+                $xpath = new \DOMXPath($doc);
+                $links = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//div[@class="cardBody"]//a[@class="price"]//@href');
+                $titles = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//div[@class="cardBody"]//a[@class="name"]//@title');
+                $prices = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//div[@class="cardBody"]//span[@class="mainValue"]');
+                $images = $xpath->evaluate('//div[@class="SearchPage_SearchList__HL7RI col"][1]//div[@class="card card--prod"]//img[@class="image"]/@src');
+                $arrayLength = $images->length;
+                $pagination = $xpath->evaluate('//div[@class="SearchPage_Pagination__3TZvP col"][1]//ul[@class="ais-Pagination-list ais-Pagination"]//li');
+                $pagination = (!empty($pagination) || $pagination > 3 ? $pagination->length - 3 : null);
 
 
-            $products = [];
-            for ($i = 0; $i < $arrayLength; $i++){
-                $product = new \stdClass();
-                $product->thumbnail = $images[$i]->value;
-                $product->title = $titles[$i]->value;
-                $product->price = (float)preg_replace("/\D/","", $prices[$i]->textContent);
-                $product->permalink = "https://www.buscape.com.br/{$category}{$links[$i]->value}";
-                $products[] = $product;
-            }
-            if (count($products) <= $pagination){
-                $pager->pager(1, 1, $page);
+                $products = [];
+                for ($i = 0; $i < $arrayLength; $i++){
+                    $product = new \stdClass();
+                    $product->thumbnail = $images[$i]->value;
+                    $product->title = $titles[$i]->value;
+                    $product->price = (float)preg_replace("/\D/","", $prices[$i]->textContent);
+                    $product->permalink = "https://www.buscape.com.br/{$category}{$links[$i]->value}";
+                    $products[] = $product;
+                }
+                if (count($products) <= $pagination){
+                    $pager->pager(1, 1, $page);
+                } else {
+                    $pager->pager($pagination, 1, $page, 1);
+                }
+
+                echo $this->view->render("home", [
+                    "products" => $products,
+                    "paginator" => $pager->render("Page"),
+                    "category" => $category,
+                    "search" => urldecode($search),
+                    "web" => $data['web']
+                ]);
             } else {
-                $pager->pager($pagination, 1, $page, 1);
+                $this->message->warning("selecione uma categoria e pesquise por algum produto!")->flash();
+                redirect("/");
             }
-
-            echo $this->view->render("home", [
-                "products" => $products,
-                "paginator" => $pager->render("Page"),
-                "category" => $category,
-                "search" => urldecode($search),
-                "web" => $data['web']
-            ]);
         }
     }
 
